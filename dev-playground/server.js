@@ -4,7 +4,7 @@ var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
 
-var pdfmake = require('../js/index');
+var pdfmake = require('../src/index');
 
 var app = express();
 
@@ -29,9 +29,10 @@ function createPdfBinary(docDefinition) {
 }
 
 app.post('/pdf', function (req, res) {
-	eval(req.body.content);
 
-	createPdfBinary(dd).then(function (binary) {
+	const docDefinition = Function(`${req.body.content}; return dd;`)();
+
+	createPdfBinary(docDefinition).then(function (binary) {
 		res.contentType('application/pdf');
 		res.send(binary);
 	}, function (error) {

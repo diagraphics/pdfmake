@@ -17,6 +17,7 @@
   "devDependencies": {
     "@babel/cli": "^7.16.7",
     "@babel/core": "^7.16.7",
+    "@babel/node": "^7.16.8",
     "@babel/plugin-transform-modules-commonjs": "^7.16.7",
     "@babel/preset-env": "^7.16.7",
     "assert": "^2.0.0",
@@ -60,7 +61,7 @@
     "build:fonts": "shx mkdir -p build/fonts && shx mkdir -p build/fonts/Roboto && shx cp -r fonts/Roboto/*.* build/fonts/Roboto && brfs \"./src/browser-extensions/fonts/Roboto.js\" > build/fonts/Roboto.js",
     "lint": "eslint \"./src/**/*.js\" \"./tests/**/*.js\" \"./examples/**/*.js\" \"./standard-fonts/**/*.js\" \"./fonts/**/*.js\"",
     "mocha": "mocha --reporter spec \"./tests/**/*.spec.js\"",
-    "playground": "node dev-playground/server.js"
+    "playground": "nodemon --exec babel-node -- ./dev-playground/server.js"
   },
   "repository": {
     "type": "git",
