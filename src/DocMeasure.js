@@ -59,6 +59,9 @@ class DocMeasure {
 				return extendMargins(this.measureSVG(node));
 			} else if (node.canvas) {
 				return extendMargins(this.measureCanvas(node));
+			} else if (node.raw) {
+				console.log('Begin measuring raw node');
+				return extendMargins(this.measureRaw(node));
 			} else if (node.qr) {
 				return extendMargins(this.measureQr(node));
 			} else if (node.attachment) {
@@ -683,6 +686,12 @@ class DocMeasure {
 		node._minHeight = node._maxHeight = h;
 		node._alignment = this.styleStack.getProperty('alignment');
 
+		return node;
+	}
+
+	measureRaw(node) {
+		const { width, height } = node;
+		this.measureImageWithDimensions(node,  { width, height});
 		return node;
 	}
 

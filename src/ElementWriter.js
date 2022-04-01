@@ -81,6 +81,13 @@ class ElementWriter extends EventEmitter {
 		}
 	}
 
+	_outOfSpace(node, context, page) {
+		return !page ||
+			(node.absolutePosition === undefined &&
+				context.availableHeight < node._height) &&
+			page.items.length > 0;
+	}
+
 	addImage(image, index) {
 		let context = this.context();
 		let page = context.getCurrentPage();
@@ -135,6 +142,34 @@ class ElementWriter extends EventEmitter {
 		context.moveDown(height);
 
 		return positions;
+	}
+
+	addRaw(raw, index) {
+		let context = this.context();
+		let page = context.getCurrentPage();
+		let position = this.getCurrentPositionOnPage();
+
+		if (this._outOfSpace(raw, context, page)) {
+			return false;
+		}
+
+		if (raw._x === undefined) {
+			raw._x = raw.x || 0;
+		}
+
+		raw.x = context.x + raw._x;
+		raw.y = context.y;
+
+		this.alignImage(raw);
+
+		addPageItem(page, {
+			type: 'raw',
+			item: raw
+		}, index);
+
+		context.moveDown(raw._height);
+
+		return position;
 	}
 
 	addSVG(image, index) {
@@ -328,6 +363,7 @@ class ElementWriter extends EventEmitter {
 					});
 					break;
 
+				case 'raw':
 				case 'image':
 				case 'svg':
 					var img = pack(item.item);

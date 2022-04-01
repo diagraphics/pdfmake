@@ -75,6 +75,9 @@ class Renderer {
 					case 'image':
 						this.renderImage(item.item);
 						break;
+					case 'raw':
+						this.renderRaw(item.item);
+						break;
 					case 'svg':
 						this.renderSVG(item.item);
 						break;
@@ -359,6 +362,28 @@ class Renderer {
 		}
 
 		this.pdfDocument.fileAnnotation(attachment.x, attachment.y, attachment._width, attachment._height, file, options);
+	}
+
+	renderRaw(raw) {
+		const doc = this.pdfDocument;
+		const render = raw.raw;
+
+		doc.save();
+		doc.translate(raw.x, raw.y);
+
+		if (raw.clip) {
+			doc.rect(0, 0, raw.width, raw.height).clip();
+		}
+
+		if (raw.debug) {
+			doc.save();
+			doc.rect(0, 0, raw.width, raw.height).dash(5, {space: 10}).stroke("red");
+			doc.restore();
+		}
+
+		render(this.pdfDocument);
+
+		doc.restore();
 	}
 
 	beginClip(rect) {

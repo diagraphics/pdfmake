@@ -53,6 +53,9 @@ class DocPreprocessor {
 			return this.preprocessSVG(node);
 		} else if (node.canvas) {
 			return this.preprocessCanvas(node);
+		} else if (node.raw) {
+			console.log('Pre-processing raw node');
+			return this.preprocessRaw(node);
 		} else if (node.qr) {
 			return this.preprocessQr(node);
 		} else if (node.attachment) {
@@ -237,6 +240,10 @@ class DocPreprocessor {
 	}
 
 	preprocessCanvas(node) {
+		return node;
+	}
+
+	preprocessRaw(node) {
 		return node;
 	}
 

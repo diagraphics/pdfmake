@@ -76,7 +76,7 @@ class LayoutBuilder {
 			linearNodeList.forEach(node => {
 				let nodeInfo = {};
 				[
-					'id', 'text', 'ul', 'ol', 'table', 'image', 'qr', 'canvas', 'svg', 'columns',
+					'id', 'text', 'ul', 'ol', 'table', 'image', 'qr', 'canvas', 'raw', 'svg', 'columns',
 					'headlineLevel', 'style', 'pageBreak', 'pageOrientation',
 					'width', 'height'
 				].forEach(key => {
@@ -138,7 +138,10 @@ class LayoutBuilder {
 			return false;
 		}
 
+		console.info('Initializing DocPreprocessor');
 		this.docPreprocessor = new DocPreprocessor();
+
+		console.info('Initializng DocMeasure');
 		this.docMeasure = new DocMeasure(pdfDocument, styleDictionary, defaultStyle, this.svgMeasure, this.tableLayouts);
 
 		function resetXYs(result) {
@@ -437,6 +440,8 @@ class LayoutBuilder {
 				this.processSVG(node);
 			} else if (node.canvas) {
 				this.processCanvas(node);
+			} else if (node.raw) {
+				this.processRaw(node);
 			} else if (node.qr) {
 				this.processQr(node);
 			} else if (node.attachment) {
@@ -765,6 +770,12 @@ class LayoutBuilder {
 	processCanvas(node) {
 		let positions = this.writer.addCanvas(node);
 		addAll(node.positions, positions);
+	}
+
+	processRaw(node) {
+		console.log(`Proessing raw node: ${JSON.stringify(node)}`);
+		let position = this.writer.addRaw(node);
+		node.positions.push(position);
 	}
 
 	processSVG(node) {
