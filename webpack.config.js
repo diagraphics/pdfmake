@@ -9,8 +9,8 @@ var banner = '/*! ' + pkg.name + ' v' + pkg.version + ', @license ' + pkg.licens
 module.exports = {
 	mode: 'production',
 	entry: {
-		'pdfmake': './src/browser-extensions/pdfMake.js',
-		'pdfmake.min': './src/browser-extensions/pdfMake.js'
+		'pdfmake': ['webpack-hot-middleware/client','./src/browser-extensions/pdfMake.js'],
+		'pdfmake.min': ['webpack-hot-middleware/client','./src/browser-extensions/pdfMake.js'],
 	},
 	output: {
 		path: path.join(__dirname, './build'),
@@ -173,6 +173,7 @@ module.exports = {
 		]
 	},
 	plugins: [
+		new webpack.HotModuleReplacementPlugin(),
 		new webpack.ProvidePlugin({
 			process: 'process/browser', // require "process" library, fix "process is not defined" error, source: https://stackoverflow.com/a/64553486
 			Buffer: ['buffer', 'Buffer'] // require "buffer" library, fix "Buffer is not defined" error, source: https://github.com/webpack/changelog-v5/issues/10#issuecomment-615877593

@@ -3,10 +3,23 @@ var http = require('http');
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
+/*
+var webpack = require('webpack');
+var webpackConfig = require('../webpack.config');
+var compiler = webpack(webpackConfig);
+*/
 
 var pdfmake = require('../src/index');
 
 var app = express();
+
+/*
+app.use(require("webpack-dev-middleware")(compiler, {
+	publicPath: webpackConfig.output.publicPath
+}));
+
+app.use(require("webpack-hot-middleware")(compiler));
+*/
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json({ limit: '50mb' }));
